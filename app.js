@@ -1,6 +1,6 @@
 const choices = ["rock", "paper", "scissors"];
-let playerScore;
-let computerScore;
+let playerScore = 0;
+let computerScore = 0;
 
 // COMPUTER CHOICE
 const getComputerChoice = () => {
@@ -11,14 +11,15 @@ const getPlayerChoice = () => {
   const playerChoice = prompt("What is your weapon of choice?");
   return playerChoice;
 };
-const playerSelection = getPlayerChoice();
-const computerSelection = getComputerChoice();
 
 const playRound = () => {
+  const playerSelection = getPlayerChoice();
+  const computerSelection = getComputerChoice();
   switch (playerSelection + computerSelection) {
     case "rockscissors":
     case "paperrock":
     case "scissorspaper":
+      playerScore++;
       console.log(
         `You win! You chose ${playerSelection} and Computer chose ${computerSelection}`
       );
@@ -26,6 +27,7 @@ const playRound = () => {
     case "rockpaper":
     case "paperscissors":
     case "scissorsrock":
+      computerScore++;
       console.log(
         `You lose! You chose ${playerSelection} and Computer chose ${computerSelection}`
       );
@@ -37,4 +39,8 @@ const playRound = () => {
   }
 };
 
-console.log(playRound());
+const game = () => {
+  for (let i = 0; i < 5; i++) {
+    playRound();
+  }
+};
