@@ -33,8 +33,16 @@ gameGrid.append(
 );
 
 const choices = ["rock", "paper", "scissors"];
+
 let playerChoice;
 let compChoice;
+
+// Computer random choices
+const getComputerChoice = () => {
+  const randChoice = choices[Math.floor(Math.random() * choices.length)];
+  compChoice = randChoice;
+  compChoiceDisplay.textContent = `Computer: ${compChoice}`;
+};
 
 const handleClick = (e) => {
   playerChoice = e.target.id;
@@ -44,13 +52,6 @@ const handleClick = (e) => {
   game();
   playerScoreDisplay.textContent = `Player Score: ${playerScore}`;
   compScoreDisplay.textContent = `Computer Score: ${compScore}`;
-};
-
-// Computer random choices
-const getComputerChoice = () => {
-  const randChoice = choices[Math.floor(Math.random() * choices.length)];
-  compChoice = randChoice;
-  compChoiceDisplay.textContent = `Computer: ${compChoice}`;
 };
 
 // Button creation
@@ -71,7 +72,7 @@ const playRound = () => {
     case "scissorspaper":
       resultDisplay.textContent = "You win!";
       playerScore++;
-      battleLog.textContent = `You win! You chose ${playerChoice} and Computer chose ${compChoice}`;
+      battleLog.textContent = `You chose ${playerChoice} and Computer chose ${compChoice}`;
 
       break;
     case "rockpaper":
@@ -79,33 +80,16 @@ const playRound = () => {
     case "scissorsrock":
       resultDisplay.textContent = "You lose!";
       compScore++;
-      battleLog.textContent = `You lose! You chose ${playerChoice} and Computer chose ${compChoice}`;
+      battleLog.textContent = `You chose ${playerChoice} and Computer chose ${compChoice}`;
       break;
     case "rockrock":
     case "paperpaper":
     case "scissorsscissors":
       resultDisplay.innerHTML = "It's a tie!";
-      battleLog.textContent = `It's a tie! Both chose ${playerChoice}`;
+      battleLog.textContent = `Both chose ${playerChoice}`;
       break;
   }
 };
-const btns = document.querySelectorAll(".btn");
-// Win condition logic
-const game = () => {
-  if (playerScore < 5) {
-    battleLog.textContent = "You won the battle!";
-  }
-  if (compScore < 5) {
-    battleLog.textContent = "You LOST the battle!";
-  } else {
-    btns.disabled = true;
-    // console.log("STOP!");
-  }
-};
-
-resetBtn.addEventListener("click", function () {
-  reset();
-});
 
 // Reset
 const reset = () => {
@@ -117,5 +101,33 @@ const reset = () => {
   compChoiceDisplay.textContent = `Computer: ${""}`;
   resultDisplay.textContent = "";
   battleLog.textContent = "";
-  document.getElementById("Button").disabled = false;
+  enableIt();
 };
+
+resetBtn.addEventListener("click", function () {
+  reset();
+});
+
+// Win condition logic
+const game = () => {
+  if (playerScore >= 5 || compScore >= 5) {
+    disableBtns();
+  }
+  if (playerScore === 5) {
+    battleLog.textContent = "You won the battle!";
+  }
+  if (compScore === 5) {
+    battleLog.textContent = "You LOST the battle!";
+  }
+};
+
+function disableBtns() {
+  document.querySelector("#rock").disabled = true;
+  document.querySelector("#paper").disabled = true;
+  document.querySelector("#scissors").disabled = true;
+}
+function enableIt() {
+  document.querySelector("#rock").disabled = false;
+  document.querySelector("#paper").disabled = false;
+  document.querySelector("#scissors").disabled = false;
+}
