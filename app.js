@@ -1,83 +1,121 @@
 let playerScore = 0;
-let computerScore = 0;
+let compScore = 0;
+
+const playerChoiceDisplay = document.createElement("h1");
+playerChoiceDisplay.textContent = `Player: ${""}`;
+
+const compChoiceDisplay = document.createElement("h1");
+compChoiceDisplay.textContent = `Computer: ${""}`;
+
+const playerScoreDisplay = document.createElement("h2");
+playerScoreDisplay.textContent = `Player Score: ${playerScore}`;
+
+const compScoreDisplay = document.createElement("h2");
+compScoreDisplay.textContent = `Computer Score: ${compScore}`;
+
+const resultDisplay = document.createElement("h1");
+const gameGrid = document.querySelector("#mainDiv");
+
+const battleLog = document.createElement("h3");
+battleLog.textContent = "";
+
+const resetBtn = document.createElement("button");
+resetBtn.textContent = "Reset";
+
+gameGrid.append(
+  playerChoiceDisplay,
+  compChoiceDisplay,
+  playerScoreDisplay,
+  compScoreDisplay,
+  resultDisplay,
+  battleLog,
+  resetBtn
+);
+
 const choices = ["rock", "paper", "scissors"];
+let playerChoice;
+let compChoice;
 
-const mainDiv = document.querySelector("#mainDiv");
-
-const rock = document.createElement("button");
-rock.id = "rock";
-rock.textContent = "rock";
-
-const paper = document.createElement("button");
-paper.textContent = "paper";
-paper.id = "paper";
-
-const scissors = document.createElement("button");
-scissors.textContent = "scissors";
-scissors.setAttribute("id", "scissors");
-
-const display = document.createElement("div");
-mainDiv.append(display);
-
-mainDiv.append(rock);
-mainDiv.append(paper);
-mainDiv.append(scissors);
-
-// select player for score display
-const playerDisplay = document.querySelector(".player");
-const comp = document.querySelector(".comp");
-
-// EVENT LISTENERS FOR ALL THREE BUTTONS
-const buttons = document.querySelectorAll("button");
-buttons.forEach((button) => {
-  button.addEventListener("click", function (e) {
-    playerDisplay.textContent = `Player: ${e.target.textContent}`;
-  });
-});
-
-// FUNCTIONS
-
-// COMPUTER CHOICE
-const getComputerChoice = () => {
-  return (compChoice = choices[Math.floor(Math.random() * choices.length)]);
+const handleClick = (e) => {
+  playerChoice = e.target.id;
+  playerChoiceDisplay.textContent = `Player: ${playerChoice}`;
+  getComputerChoice();
+  playRound();
+  game();
+  playerScoreDisplay.textContent = `Player Score: ${playerScore}`;
+  compScoreDisplay.textContent = `Computer Score: ${compScore}`;
 };
 
-// Player CHOICE
-// const getPlayerChoice = () => {
-//   const playerChoice = prompt("What is your weapon of choice?");
-//   return playerChoice;
-// };
+// Computer random choices
+const getComputerChoice = () => {
+  const randChoice = choices[Math.floor(Math.random() * choices.length)];
+  compChoice = randChoice;
+  compChoiceDisplay.textContent = `Computer: ${compChoice}`;
+};
 
-// GAMEPLAY LOGIC
+// Button creation
+choices.forEach((choice) => {
+  const button = document.createElement("button");
+  button.classList.add("btn");
+  button.id = choice;
+  button.textContent = choice;
+  button.addEventListener("click", handleClick);
+  gameGrid.append(button);
+});
+
+// Game logic
 const playRound = () => {
-  const playerSelection = getPlayerChoice();
-  const computerSelection = getComputerChoice();
-  switch (playerSelection + computerSelection) {
+  switch (playerChoice + compChoice) {
     case "rockscissors":
     case "paperrock":
     case "scissorspaper":
+      resultDisplay.textContent = "You win!";
       playerScore++;
-      console.log(
-        `You win! You chose ${playerSelection} and Computer chose ${computerSelection}`
-      );
+      battleLog.textContent = `You win! You chose ${playerChoice} and Computer chose ${compChoice}`;
+
       break;
     case "rockpaper":
     case "paperscissors":
     case "scissorsrock":
-      computerScore++;
-      console.log(
-        `You lose! You chose ${playerSelection} and Computer chose ${computerSelection}`
-      );
+      resultDisplay.textContent = "You lose!";
+      compScore++;
+      battleLog.textContent = `You lose! You chose ${playerChoice} and Computer chose ${compChoice}`;
       break;
     case "rockrock":
     case "paperpaper":
     case "scissorsscissors":
-      console.log(`It's a tie! Both chose ${playerSelection}`);
+      resultDisplay.innerHTML = "It's a tie!";
+      battleLog.textContent = `It's a tie! Both chose ${playerChoice}`;
+      break;
   }
 };
-// LOOP
-// const game = () => {
-//   for (let i = 0; i < 5; i++) {
-//     playRound();
-//   }
-// };
+const btns = document.querySelectorAll(".btn");
+// Win condition logic
+const game = () => {
+  if (playerScore < 5) {
+    battleLog.textContent = "You won the battle!";
+  }
+  if (compScore < 5) {
+    battleLog.textContent = "You LOST the battle!";
+  } else {
+    btns.disabled = true;
+    // console.log("STOP!");
+  }
+};
+
+resetBtn.addEventListener("click", function () {
+  reset();
+});
+
+// Reset
+const reset = () => {
+  playerScore = 0;
+  compScore = 0;
+  playerScoreDisplay.textContent = `Player Score: ${playerScore}`;
+  compScoreDisplay.textContent = `Computer Score: ${compScore}`;
+  playerChoiceDisplay.textContent = `Player: ${""}`;
+  compChoiceDisplay.textContent = `Computer: ${""}`;
+  resultDisplay.textContent = "";
+  battleLog.textContent = "";
+  document.getElementById("Button").disabled = false;
+};

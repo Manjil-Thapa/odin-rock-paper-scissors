@@ -10,3 +10,10 @@
   align-items: center;
   height: 100vh;
 }
+
+/* #mainDiv::before {
+  content: "";
+  background-color: black;
+  width: 10px;
+  height: 10px;
+} */
